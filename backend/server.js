@@ -3,10 +3,13 @@ const cors = require("cors");
 require("dotenv").config();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
+const path = require("path");
+
 const app = express();
 
 app.use(cors());
-app.use(express.json());
+app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.json({ limit: '50mb' }));
 
 // 🔑 PUT YOUR GEMINI API KEY HERE
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -15,12 +18,25 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 app.post("/chat", async (req, res) => {
     try {
         const userMessage = req.body.message;
+        const imageBase64 = req.body.imageBase64;
+        const mimeType = req.body.mimeType;
 
         const model = genAI.getGenerativeModel({
-            model: "gemini-2.0-flash-lite"
+            model: "gemini-2.5-flash"
         });
 
-        const result = await model.generateContent(userMessage);
+        let promptPayload = [userMessage];
+
+        if (imageBase64 && mimeType) {
+            promptPayload.push({
+                inlineData: {
+                    data: imageBase64,
+                    mimeType: mimeType
+                }
+            });
+        }
+
+        const result = await model.generateContent(promptPayload);
         const response = await result.response;
         const text = response.text();
 

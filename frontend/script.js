@@ -5,6 +5,13 @@ try {
 const text =
 document.getElementById("msg").value;
 
+const payload = { message: text };
+
+if (window.currentImageBase64) {
+    payload.imageBase64 = window.currentImageBase64;
+    payload.mimeType = window.currentImageMimeType;
+}
+
 const response =
 await fetch(
 "http://localhost:3000/chat",
@@ -16,9 +23,7 @@ headers: {
 "application/json"
 },
 
-body: JSON.stringify({
-message: text
-})
+body: JSON.stringify(payload)
 
 }
 );
@@ -111,3 +116,28 @@ function startListening() {
         btn.innerText = "🎤 Speak";
     };
 }
+
+// ===== IMAGE INTEGRATION =====
+
+document.getElementById('image-input').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) {
+        window.currentImageBase64 = null;
+        window.currentImageMimeType = null;
+        document.getElementById('image-preview').style.display = 'none';
+        return;
+    }
+
+    window.currentImageMimeType = file.type;
+    
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const result = event.target.result;
+        document.getElementById('image-preview').src = result;
+        document.getElementById('image-preview').style.display = 'block';
+        
+        // Extract base64 without the data URI prefix
+        window.currentImageBase64 = result.split(',')[1];
+    };
+    reader.readAsDataURL(file);
+});

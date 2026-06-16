@@ -20,9 +20,11 @@ id="msg"
 placeholder="Ask something">
 
 <div class="controls">
+<input type="file" id="image-input" accept="image/*">
 <button onclick="send()">Ask</button>
 <button id="speak-btn" onclick="startListening()">🎤 Speak</button>
 </div>
+<img id="image-preview" src="" alt="Preview" style="display: none; max-width: 200px; margin: 10px auto; border-radius: 8px;">
 
 <p id="output"></p>
 
