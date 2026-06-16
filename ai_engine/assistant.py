@@ -1,19 +1,29 @@
-text=input().lower()
+import sys
+
+text=
+sys.argv[1].lower()
 
 responses={
 
-"hello":"Hello! How can I help?",
+"hello":
+"Hello User",
 
-"python":"Python is used for AI and development",
+"python":
+"Python is powerful",
 
 "who are you":
-"I am an AI Virtual Assistant"
+"I am AI Virtual Assistant"
 
 }
 
 print(
+
 responses.get(
+
 text,
-"Sorry, I didn't understand"
+
+"Sorry I don't understand"
+
 )
+
 )
