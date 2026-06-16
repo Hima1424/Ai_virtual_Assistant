@@ -19,9 +19,10 @@ href="style.css">
 id="msg"
 placeholder="Ask something">
 
-<button onclick="send()">
-Ask
-</button>
+<div class="controls">
+<button onclick="send()">Ask</button>
+<button id="speak-btn" onclick="startListening()">🎤 Speak</button>
+</div>
 
 <p id="output"></p>
 
